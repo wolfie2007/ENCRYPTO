@@ -1,0 +1,12 @@
+# Dependencies and Builds (These are the large files that cause the error)
+/node_modules
+/package-lock.json
+
+# Electron Build Artifacts
+*.exe
+*.dll
+*.pak
+*.bin
+/vault*
+/Encrypto-win32-x64
+/Encrypto-darwin-x64

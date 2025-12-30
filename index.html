@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ENCRYPTO | Secure Encryption</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+    /* Base reset */
+    * { 
+        box-sizing: border-box; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'DM Sans', sans-serif; 
+    }
+    body {
+        /* Deep, rich near-black background */
+        background: #121212;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #e0e0e0; /* Bright white text for contrast */
+    }
+
+    /* Main container (The Card) */
+    .vault-container {
+        background: #1e1e1e; /* Slightly lighter dark background for the card */
+        width: 650px; 
+        padding: 45px;
+        border-radius: 20px;
+        /* Subtle, deep shadow for a sleek, floating look */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px #333333;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* Header */
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    h2 {
+        font-size: 38px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+    }
+    
+    .logo-icon {
+        font-size: 50px;
+        color: #00d4ff; /* Neon Aqua Accent */
+    }
+
+    .subtitle {
+        font-size: 16px;
+        font-weight: 400;
+        color: #909090;
+        margin-top: 5px;
+    }
+
+    /* Content area */
+    .content-area {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Input group styling */
+    .input-group {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 20px;
+        color: #606060;
+        font-size: 24px;
+        pointer-events: none;
+        z-index: 2; /* Ensure icon is above input */
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 16px 20px 16px 60px;
+        border-radius: 12px;
+        border: 1px solid #333333; /* Dark border */
+        font-size: 17px;
+        font-weight: 500;
+        color: #ffffff;
+        background: #282828; /* Input background */
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+        transition: border-color 0.3s, box-shadow 0.3s;
+        outline: none;
+    }
+
+    /* Roboto Mono for PIN input */
+    #pin {
+        font-family: monospace, 'Roboto Mono', monospace;
+        padding-right: 60px; /* Space for the toggle button */
+    }
+
+    input::placeholder {
+        color: #797474;
+        font-weight: 400;
+    }
+
+    input:focus {
+        border-color: #00d4ff; /* Neon Aqua focus ring */
+        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3);
+    }
+    
+    /* Pin Toggle Button */
+    #togglePin {
+        position: absolute;
+        right: 15px;
+        background: none;
+        border: none;
+        color: #606060;
+        cursor: pointer;
+        padding: 0;
+        font-size: 24px;
+        z-index: 3; /* Ensure toggle is clickable */
+        transition: color 0.3s;
+    }
+
+    #togglePin:hover {
+        color: #00d4ff;
+    }
+
+    /* Browse Button specific styling */
+    .browse-group {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    #filename {
+        flex-grow: 1;
+        cursor: default;
+    }
+
+    #browseBtn {
+        flex-shrink: 0;
+        width: 180px;
+        background: #00d4ff; /* Neon Aqua Primary button */
+        color: #121212; 
+        font-weight: 700;
+        border-radius: 12px;
+        padding: 16px 20px;
+        transition: background-color 0.3s, box-shadow 0.3s, transform 0.1s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 54px; 
+        border: none;
+    }
+
+    #browseBtn:hover {
+        background: #00a4cc; /* Darker on hover */
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+    }
+    #browseBtn:active {
+        transform: scale(0.98);
+    }
+
+    /* Buttons row */
+    .buttons-row { 
+        display: flex; 
+        gap: 15px; 
+        margin-top: 10px;
+    }
+
+    /* General Button Styling */
+    button {
+        border: none;
+        font-size: 17px;
+        cursor: pointer;
+        transition: background-color 0.1s, box-shadow 0.1s, transform 0.1s; /* Faster transitions for hover */
+        font-weight: 600;
+        flex-grow: 1;
+        padding: 16px;
+        border-radius: 12px;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    /* ENCRYPT Button: Electric Orange/Red */
+    #encryptBtn { 
+        background: #cf0e0e; /* Vivid Orange-Red */
+    }
+
+    #encryptBtn:hover { 
+        background: #101010; /* Near-Black for AMOLED effect */
+        box-shadow: 0 0 10px #ff5722; /* Subtle glow of the original color */
+    }
+    
+    /* DECRYPT Button: Vibrant Purple */
+    #decryptBtn { 
+        background: #3028cf; /* Vibrant Purple */
+    }
+
+    #decryptBtn:hover { 
+        background: #101010; /* Near-Black for AMOLED effect */
+        box-shadow: 0 0 10px #3e27b0; /* Subtle glow of the original color */
+    }
+
+    #encryptBtn:active, #decryptBtn:active {
+        transform: scale(0.98);
+    }
+    
+    /* Status text */
+    #status {
+        margin-top: 15px;
+        padding: 12px 15px;
+        font-weight: 500;
+        text-align: center;
+        font-size: 16px;
+        color: #00d4ff; 
+        background: #151515; 
+        border-radius: 8px;
+        min-height: 44px; 
+        border: 1px solid #282828;
+    }
+/* Footer */
+.app-footer {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #bcbcbc;
+    opacity: 0.8;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.footer-box {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #d1d1d1;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+}
+
+/* Hover Glow Effect */
+.footer-box:hover {
+    box-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 30px rgba(0,212,255,0.5), 0 0 40px rgba(0,212,255,0.3);
+    background: rgba(255,255,255,0.15);
+    color: #ffffff;
+    font-weight: 700;     
+    font-size: 16px;       
+}
+    /* Responsive */
+
+    @media (max-width: 700px) {
+        body { padding: 20px; }
+        .vault-container { width: 100%; padding: 30px; }
+        .buttons-row, .browse-group { flex-direction: column; }
+        #browseBtn { width: 100%; }
+        #encryptBtn, #decryptBtn { width: 100%; margin: 5px 0; }
+        h2 { font-size: 30px; }
+    }
+</style>
+</head>
+<body>
+<div class="vault-container">
+    <div class="header">
+        <span class="material-icons-round logo-icon">gpp_maybe</span>
+        <h2>ENCЯYPT0</h2>
+        <p class="subtitle">Protect, lock, and access your files securely.</p>
+    
+    </div>
+    <div class="content-area">
+        <div class="input-group">
+            <span class="material-icons-round input-icon">vpn_key_off</span>
+            <input id="pin" type="password" placeholder="Enter your 4-digit PIN (Master Key)" maxlength="4">
+            <button id="togglePin" type="button">
+                <span id="toggleIcon" class="material-icons-round">visibility_off</span>
+            </button>
+        </div>
+
+        <div class="browse-group">
+            <div class="input-group" style="flex-grow: 1;">
+                <span class="material-icons-round input-icon">insert_drive_file</span>
+                <input id="filename" type="text" placeholder="Select a file to process" readonly>
+            </div>
+            <button id="browseBtn" class="action-button">
+                <span class="material-icons-round">folder_open</span>
+                Browse File
+            </button>
+        </div>
+    </div>
+    
+    <div class="buttons-row">
+        <button id="encryptBtn">
+            <span class="material-icons-round">enhanced_encryption</span>
+            Encrypt File
+        </button>
+        <button id="decryptBtn">
+            <span class="material-icons-round">lock_reset</span>
+            Decrypt File
+        </button>
+    </div>
+<p id="status"></p>
+<div class="app-footer">
+    <div class="footer-box">PF FINAL PROJECT — Waqas | Saaib | Meerub</div>
+</div>
+</body>
+</html>
+
+</div>
+
+<script>
+const statusElement = document.getElementById('status');
+const filenameInput = document.getElementById('filename');
+const pinInput = document.getElementById('pin');
+const togglePinButton = document.getElementById('togglePin');
+const toggleIcon = document.getElementById('toggleIcon');
+
+
+// --- PIN TOGGLE LOGIC ---
+togglePinButton.addEventListener('click', () => {
+    const isPassword = pinInput.type === 'password';
+    pinInput.type = isPassword ? 'text' : 'password';
+    toggleIcon.textContent = isPassword ? 'visibility' : 'visibility_off';
+});
+
+
+// --- STATUS LOGIC ---
+function showStatus(message, type = 'info') {
+    statusElement.innerText = message;
+    
+    const styles = {
+        info: { color: '#00d4ff', background: '#151515', border: '#282828' },
+        error: { color: '#ff6b6b', background: '#251010', border: '#402020' },
+        success: { color: '#00b050', background: '#102510', border: '#204020' }
+    };
+
+    const style = styles[type] || styles.info;
+    statusElement.style.color = style.color;
+    statusElement.style.backgroundColor = style.background;
+    statusElement.style.borderColor = style.border;
+}
+
+// Clear status on input change for better UX
+pinInput.addEventListener('input', () => showStatus(''));
+filenameInput.addEventListener('input', () => showStatus(''));
+
+
+// --- FILE BROWSE LOGIC ---
+document.getElementById('browseBtn').addEventListener('click', async () => {
+    showStatus('Scanning for file system...');
+    if (window.electronAPI && typeof window.electronAPI.browseFile === 'function') {
+        const file = await window.electronAPI.browseFile();
+        if(file) {
+            filenameInput.value = file;
+            showStatus('File selected successfully.', 'success');
+        } else {
+            showStatus('File selection cancelled by user.', 'info');
+            filenameInput.value = '';
+        }
+    } else {
+        setTimeout(() => {
+            showStatus('Simulated file selection: document.pdf', 'success');
+            filenameInput.value = 'C:\\Users\\User\\Documents\\secret_report.pdf';
+        }, 500);
+    }
+});
+
+// --- ENCRYPT LOGIC ---
+document.getElementById('encryptBtn').addEventListener('click', async () => {
+    const pin = pinInput.value;
+    const file = filenameInput.value;
+    
+    if(!file || file === 'Select a file to process') { showStatus('Please select a file first.', 'error'); return; }
+    if(pin.length !== 4 || !/^\d{4}$/.test(pin)) { showStatus('Enter your correct PIN.', 'error'); return; }
+    
+    showStatus('Initiating secure encryption protocol...');
+    
+    if (window.electronAPI && typeof window.electronAPI.encryptFile === 'function') {
+        try {
+            const outFile = file; 
+            const result = await window.electronAPI.encryptFile(file, outFile, pin);
+            console.log('Encrypt result:', result);
+            if (result && result.includes('Encrypted OK')) {
+                showStatus('Encryption successful! File is now secured.', 'success');
+            } else {
+                showStatus('Encryption failed. ' + (result || 'Unknown error'), 'error');
+            }
+        } catch (error) {
+            showStatus('Encryption failed. ' + error.message, 'error');
+            console.error('Encryption Error:', error);
+        }
+    } else {
+        setTimeout(() => showStatus('Simulated success: File Encrypted.', 'success'), 1500);
+    }
+});
+
+// --- DECRYPT LOGIC ---
+document.getElementById('decryptBtn').addEventListener('click', async () => {
+    const pin = pinInput.value;
+    const file = filenameInput.value;
+    
+    if(!file || file === 'Select a file to process') { showStatus('Please select a file first.', 'error'); return; }
+    if(pin.length !== 4 || !/^\d{4}$/.test(pin)) { showStatus('PIN must be a 4-digit number.', 'error'); return; }
+    
+    showStatus('Initiating decryption sequence...');
+    
+    if (window.electronAPI && typeof window.electronAPI.decryptFile === 'function') {
+        try {
+            const outFile = file; 
+            const result = await window.electronAPI.decryptFile(file, outFile, pin);
+            console.log('Decrypt result:', result);
+            if (result && result.includes('Decrypted OK')) {
+                showStatus('Decryption successful! File is restored.', 'success');
+            } else {
+                showStatus('Wrong PIN or corrupted file. Try again.', 'error');
+            }
+        } catch (error) {
+            showStatus('Decryption failed. ' + error.message, 'error');
+            console.error('Decryption Error:', error);
+        }
+    } else {
+        setTimeout(() => showStatus('Simulated success: File Decrypted.', 'success'), 1500);
+    }
+});
+</script>
+</body>
+</html>
