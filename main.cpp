@@ -1,13 +1,22 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <cstring>
+/*PF - FINAL PROJECT
+Group 10. Members: Waqas Ameer, Meerub Yaseen, M. Saaib
+_________________________________________________________
+Encrypto is a lightweight file-vault tool written in C++. 
+It lets you lock and unlock any file using a user-defined PIN.
+The program loads your file into memory, encrypts it using XOR processing,
+and saves it as a protected .enc file.
+Decrypting uses the same PIN to restore the original content.*/
+
+
+
+#include <iostream>      // For printing messages to console (cout, cerr)
+#include <fstream>       // For reading and writing files (ifstream, ofstream)
+#include <string>        // For storing text and file paths as strings
+#include <vector>        // For storing file data as a list of bytes
+#include <cstring>       // For character and string manipulation functions
 using namespace std;
 
-// ============================================
 // HASH FUNCTION - Converts PIN to a number
-// ============================================
 // This function takes a 4-digit PIN and creates
 // a unique number from it. We use this to verify
 // that the correct PIN was used during decryption.
