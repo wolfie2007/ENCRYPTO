@@ -70,32 +70,32 @@ app.whenReady().then(() => {
     createWindow();
 });
 
-// IPC handlers
-ipcMain.handle('browse-file', async () => {
-    const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openFile'] });
-    if (canceled) return null;
-    return filePaths[0];
+// Inter-Process Communication handlers
+ipcMain.handle('browse-file', async () => { // Listen for file browse requests from UI
+    const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openFile'] }); // Show native file picker dialog
+    if (canceled) return null; // User cancelled, return nothing
+    return filePaths[0]; // Return first (and only) selected file path
 });
 
-ipcMain.handle('encrypt-file', async (event, input, output, pin) => {
-    return new Promise(resolve => {
-        execFile(path.join(__dirname, 'vault.exe'), ['encrypt', input, output, pin], (err, stdout, stderr) => {
-            if (err) {
-                resolve(stderr || 'Error running backend');
-            } else {
-                resolve(stdout.trim());
+ipcMain.handle('encrypt-file', async (event, input, output, pin) => { // Listen for encryption requests
+    return new Promise(resolve => { // Wrap in Promise to wait for C++ program to finish
+        execFile(path.join(__dirname, 'vault.exe'), ['encrypt', input, output, pin], (err, stdout, stderr) => { // Run vault.exe with encrypt command
+            if (err) { // C++ program returned an error
+                resolve(stderr || 'Error running backend'); // Send error message back to UI
+            } else { // Success - C++ program completed
+                resolve(stdout.trim()); // Send success message back to UI
             }
         });
     });
 });
 
-ipcMain.handle('decrypt-file', async (event, input, output, pin) => {
-    return new Promise(resolve => {
-        execFile(path.join(__dirname, 'vault.exe'), ['decrypt', input, output, pin], (err, stdout, stderr) => {
-            if (err) {
-                resolve(stderr || 'Error running backend');
-            } else {
-                resolve(stdout.trim());
+ipcMain.handle('decrypt-file', async (event, input, output, pin) => { // Listen for decryption requests
+    return new Promise(resolve => { // Wrap in Promise to wait for C++ program to finish
+        execFile(path.join(__dirname, 'vault.exe'), ['decrypt', input, output, pin], (err, stdout, stderr) => { // Run vault.exe with decrypt command
+            if (err) { // C++ program returned an error
+                resolve(stderr || 'Error running backend'); // Send error message back to UI
+            } else { // Success - C++ program completed
+                resolve(stdout.trim()); // Send success message back to UI
             }
         });
     });
