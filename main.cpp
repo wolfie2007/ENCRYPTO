@@ -57,8 +57,11 @@ bool encryptFile(const string& inputPath, const string& outputPath, const string
         cerr << "ERROR: Could not open input file: " << inputPath << endl;
         return false;
     }
-
-    vector<unsigned char> data((istreambuf_iterator<char>(in)), {});  // Read all file data into memory
+    vector<unsigned char> data;  // Created empty vector to store file data
+    char byte;  // Variable to store each byte read from file
+    while (in.read(&byte, 1)) {  // Read one byte at a time until end of file
+        data.push_back((unsigned char)byte);  // Add byte to vector
+    }
     in.close();
     cout << "Read " << data.size() << " bytes from file" << endl;
 
@@ -100,8 +103,11 @@ bool decryptFile(const string& inputPath, const string& outputPath, const string
         cerr << "ERROR: Could not open encrypted file: " << inputPath << endl;
         return false;
     }
-
-    vector<unsigned char> data((istreambuf_iterator<char>(in)), {});  // Read all encrypted data
+    vector<unsigned char> data;  // Create empty vector to store file data
+    char byte;  // Variable to store each byte read from file
+    while (in.read(&byte, 1)) {  // Read one byte at a time until end of file
+        data.push_back((unsigned char)byte);  // Add byte to vector
+    }
     in.close();
     cout << "Read " << data.size() << " bytes from encrypted file" << endl;
 
